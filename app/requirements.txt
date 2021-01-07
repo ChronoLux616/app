@@ -8,4 +8,4 @@ six
 sqlparse
 django-widget-tweaks
 
-#app
+#requirements
