@@ -1,2 +1,2 @@
 # app
-website with django
+system with django
