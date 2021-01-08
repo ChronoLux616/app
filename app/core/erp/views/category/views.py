@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
@@ -12,6 +13,7 @@ class CategoryListView(ListView):
     template_name = 'category/list.html'
 
     @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -121,6 +123,7 @@ class CategoryDeleteView(DeleteView):
         context['entity'] = 'Categorias'
         context['list_url'] = reverse_lazy('erp:category_list')
         return context
+
 
 class CategoryFormView(FormView):
     form_class = CategoryForm

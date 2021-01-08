@@ -82,3 +82,11 @@ class ProductForm(ModelForm):
             data['error'] = str(e)
         return data
 
+class TestForm(Form):
+    categories  = ModelChoiceField(queryset=Category.objects.all(), widget=Select(attrs={
+        'class': 'form-control'
+    }))
+
+    products  = ModelChoiceField(queryset=Product.objects.none(), widget=Select(attrs={
+        'class': 'form-control'
+    }))
