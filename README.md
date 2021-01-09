@@ -1,2 +1,2 @@
 # app
-system with django
+system creation using js, django, etc
