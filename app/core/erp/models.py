@@ -3,13 +3,26 @@ from django.db import models
 from datetime import datetime
 from core.erp.choices import gender_choices
 from django.forms import model_to_dict
+from core.models import BaseModel
+from crum import get_current_user
 
-class Category(models.Model):
+
+class Category(BaseModel):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-    desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
+    desc = models.CharField(max_length=500, null=True,
+                            blank=True, verbose_name='Descripción')
 
     def __str__(self):
         return self.name
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        user = get_current_user()
+        if user is not None:
+            if not self.pk:
+                self.user_creation = user
+            else:
+                self.user_updated = user
+        super(Category, self).save()  # Call the real save() method
 
     def toJSON(self):
         item = model_to_dict(self)
@@ -24,9 +37,12 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoria')
-    image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
-    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de Venta')
+    cat = models.ForeignKey(
+        Category, on_delete=models.CASCADE, verbose_name='Categoria')
+    image = models.ImageField(
+        upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
+    pvp = models.DecimalField(
+        default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de Venta')
 
     def __str__(self):
         return self.name
@@ -47,12 +63,18 @@ class Client(models.Model):
     names = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150, verbose_name='Apellidos')
     dni = models.CharField(max_length=10, unique=True, verbose_name='Dni')
-    birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
+    date_birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
-    sexo = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
+    gender = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
 
     def __str__(self):
         return self.names
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['gender'] = self.get_gender_display()
+        item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
+        return item
 
     class Meta:
         verbose_name = 'Cliente'
@@ -64,7 +86,8 @@ class Client(models.Model):
 class Sale(models.Model):
     cli = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_joined = models.DateField(default=datetime.now)
-    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    subtotal = models.DecimalField(
+        default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
@@ -83,7 +106,8 @@ class DetSale(models.Model):
     prod = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     cant = models.IntegerField(default=0)
-    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    subtotal = models.DecimalField(
+        default=0.00, max_digits=9, decimal_places=2)
 
     def __str__(self):
         return self.prod.name
@@ -94,7 +118,7 @@ class DetSale(models.Model):
         db_table = 'detalle_venta'
         ordering = ['id']
 
-#=======================================================================================================================
+# =======================================================================================================================
 
 # class Type(models.Model):
 #     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)

@@ -1,5 +1,12 @@
 {% extends 'layout.html' %}
 {% load widget_tweaks %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+<script src="{% static 'lib/select2-4.0.13/js/select2.min.js'  %}"></script>
+<script src="{% static 'lib/select2-4.0.13/js/i18n/es.js'  %}"></script>
+{% endblock  %}
 {% block content %}
 <form method="post" action="." enctype="multipart/form-data">
     <div class="card card-primary">
@@ -22,9 +29,15 @@
 </form>
 <script>
     $(function () {
+
+        var select_products = $('select[name="products"]');
+        $('.select2').select2({
+            theme: "bootstrap4",
+            language: "es"
+        });
+
         $('select[name="categories"]').on('change', function () {
             var id = $(this).val();
-            var select_products = $('select[name="products"]');
             var options = '<option value="">----------------</option>';
             if (id == '') {
                 select_products.html(options);
@@ -42,16 +55,21 @@
             }).done(function (data) {
                 console.log(data);
                 if (!data.hasOwnProperty('error')) {
-                    $.each(data, function (key, value) {
-                        options += '<option value="' + value.id + '">' + value.name + '</option>';
+                    select_products.html('').select2({
+                        theme: "bootstrap4",
+                        language: "es",
+                        data: data
                     });
+                    /*$.each(data, function (key, value) {
+                        options += '<option value="' + value.id + '">' + value.name + '</option>';
+                    });*/
                     return false;
                 }
                 message_error(data.error);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus + ': ' + errorThrown);
             }).always(function (data) {
-                select_products.html(options);
+                //select_products.html(options);
             });
         });
     });
