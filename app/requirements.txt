@@ -8,5 +8,3 @@ six
 sqlparse
 django-widget-tweaks
 django-crum
-
-#requirements
