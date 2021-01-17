@@ -7,22 +7,12 @@ from core.models import BaseModel
 from crum import get_current_user
 
 
-class Category(BaseModel):
+class Category(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-    desc = models.CharField(max_length=500, null=True,
-                            blank=True, verbose_name='Descripción')
+    desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
 
     def __str__(self):
         return self.name
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        user = get_current_user()
-        if user is not None:
-            if not self.pk:
-                self.user_creation = user
-            else:
-                self.user_updated = user
-        super(Category, self).save()  # Call the real save() method
 
     def toJSON(self):
         item = model_to_dict(self)
@@ -37,15 +27,19 @@ class Category(BaseModel):
 
 class Product(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-    cat = models.ForeignKey(
-        Category, on_delete=models.CASCADE, verbose_name='Categoria')
-    image = models.ImageField(
-        upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
-    pvp = models.DecimalField(
-        default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de Venta')
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoria')
+    image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
+    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de Venta')
 
     def __str__(self):
         return self.name
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['cat'] = self.cat.toJSON()
+        item['image'] = self.get_image()
+        item['pvp'] = format(self.pvp, '.2f')
+        return item
 
     def get_image(self):
         if self.image:
@@ -86,8 +80,7 @@ class Client(models.Model):
 class Sale(models.Model):
     cli = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_joined = models.DateField(default=datetime.now)
-    subtotal = models.DecimalField(
-        default=0.00, max_digits=9, decimal_places=2)
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
@@ -106,8 +99,7 @@ class DetSale(models.Model):
     prod = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     cant = models.IntegerField(default=0)
-    subtotal = models.DecimalField(
-        default=0.00, max_digits=9, decimal_places=2)
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
     def __str__(self):
         return self.prod.name

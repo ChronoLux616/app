@@ -1,5 +1,5 @@
-from django.forms import *
 from datetime import datetime
+from django.forms import *
 from core.erp.models import Category, Product, Client
 
 
@@ -28,7 +28,6 @@ class CategoryForm(ModelForm):
                 }
             ),
         }
-        exclude = ['user_updated', 'user_creation']
 
     def save(self, commit=True):
         data = {}
@@ -41,13 +40,6 @@ class CategoryForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
-
-    # def clean(self):
-    #     cleaned = super().clean()
-    #     if len(cleaned['name']) <= 50:
-    #         raise forms.ValidationError('Validacion xxx')
-    #         # self.add_error('name', 'Le faltan caracteres')
-    #     return cleaned
 
 
 class ProductForm(ModelForm):
@@ -64,9 +56,10 @@ class ProductForm(ModelForm):
                     'placeholder': 'Ingrese un nombre',
                 }
             ),
-            'pvp': NumberInput(
+            'cat': Select(
                 attrs={
-                    'min': '0.0',
+                    'class': 'select2',
+                    'style': 'width: 100%'
                 }
             ),
         }
@@ -82,18 +75,6 @@ class ProductForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
-
-
-class TestForm(Form):
-    categories = ModelChoiceField(queryset=Category.objects.all(), widget=Select(attrs={
-        'class': 'form-control select2',
-        'style': 'width: 100%'
-    }))
-
-    products = ModelChoiceField(queryset=Product.objects.none(), widget=Select(attrs={
-        'class': 'form-control select2',
-        'style': 'width: 100%'
-    }))
 
 
 class ClientForm(ModelForm):
@@ -132,7 +113,6 @@ class ClientForm(ModelForm):
             ),
             'gender': Select()
         }
-        exclude = ['user_updated', 'user_creation']
 
     def save(self, commit=True):
         data = {}
@@ -152,3 +132,25 @@ class ClientForm(ModelForm):
     #         raise forms.ValidationError('Validacion xxx')
     #         # self.add_error('name', 'Le faltan caracteres')
     #     return cleaned
+
+
+class TestForm(Form):
+    categories = ModelChoiceField(queryset=Category.objects.all(), widget=Select(attrs={
+        'class': 'form-control select2',
+        'style': 'width: 100%'
+    }))
+
+    products = ModelChoiceField(queryset=Product.objects.none(), widget=Select(attrs={
+        'class': 'form-control select2',
+        'style': 'width: 100%'
+    }))
+
+    # search = CharField(widget=TextInput(attrs={
+    #     'class': 'form-control',
+    #     'placeholder': 'Ingrese una descripción'
+    # }))
+
+    search = ModelChoiceField(queryset=Product.objects.none(), widget=Select(attrs={
+        'class': 'form-control select2',
+        'style': 'width: 100%'
+    }))

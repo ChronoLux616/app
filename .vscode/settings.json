@@ -13,5 +13,6 @@
             "database": "db",
             "username": "root"
         }
-    ]
+    ],
+    "liveServer.settings.AdvanceCustomBrowserCmdLine": ""
 }
