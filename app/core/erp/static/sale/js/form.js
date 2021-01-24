@@ -1,3 +1,4 @@
+var tlbProducts;
 var vents = {
     items :{
         cli: '',
@@ -28,7 +29,7 @@ var vents = {
     },
     list: function () {
         this.calculate_invoice();
-        $('#tblProducts').DataTable({
+        tlbProducts = $('#tblProducts').DataTable({
         responsive: true,
         autoWidth: false,
         destroy: true,
@@ -64,7 +65,7 @@ var vents = {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return '<input type="text" name="cant" class="form-control form-control-sm" autocomplete="off" value="'+row.cant+'">';
+                    return '<input type="text" name="cant" class="form-control form-control-sm input-sm" autocomplete="off" value="'+row.cant+'">';
                 }
             },
             {
@@ -76,6 +77,13 @@ var vents = {
                 }
             },
         ],
+        rowCallback(row, data, displayNum, displayIndex, dataIndex) {
+            $(row).find('input[name="cant"]').TouchSpin({
+                min: 1,
+                max: 10000,
+                step: 1
+            });
+        },
         initComplete: function (settings, json) {
 
         }
@@ -108,6 +116,7 @@ $(function () {
                 vents.calculate_invoice();
             }).val(0.12);
 
+    // search product
     $('input[name="search"]').autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -137,5 +146,15 @@ $(function () {
                     vents.add(ui.item);
                     $(this).val('');
                 }
+    });
+
+    // event cant
+    $('#tblProducts tbody').on('change keyup', 'input[name="cant"]', function(){
+        console.clear();
+        var cant = parseInt($(this).val());
+        var tr = tlbProducts.cell($(this).closest('td, li')).index();
+        vents.items.products[tr.row].cant = cant;
+        vents.calculate_invoice();
+        $('td:eq(5)', tlbProducts.row(tr.row).node()).html('$'+vents.items.products[tr.row].subtotal.toFixed(2));
     });
 });
