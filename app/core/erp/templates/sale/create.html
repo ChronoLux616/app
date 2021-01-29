@@ -16,7 +16,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="card card-primary">
+<form action="" method="post">
+    <div class="card card-primary">
     <div class="card-header">
         <h3 class="card-title">
             {% if action == 'add' %}
@@ -41,7 +42,7 @@
                                 <input type="text" class="form-control" name="search"
                                        placeholder="Ingrese una descripción de producto" autocomplete="off">
                                 <span class="input-group-append">
-                                        <button type="button" class="btn btn-danger btn-flat"><i
+                                        <button type="button" class="btn btn-danger btn-flat btnClearSearch"><i
                                                 class="fas fa-times"></i></button>
                                       </span>
                             </div>
@@ -74,6 +75,7 @@
                         <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos de la factura</h3>
                     </div>
                     <div class="card-body">
+                        <input type="hidden" name="action" value="{{ action }}">
                         <div class="form-group">
                             <label>Fecha de venta:</label>
                             {{ form.date_joined }}
@@ -112,4 +114,5 @@
         </a>
     </div>
 </div>
+</form>
 {% endblock %}
