@@ -4,7 +4,7 @@ from core.erp.views.client.views import *
 from core.erp.views.dashboard.views import *
 from core.erp.views.product.views import *
 from core.erp.views.tests.views import TestView
-from core.erp.views.sale.views import SaleCreateView
+from core.erp.views.sale.views import *
 
 app_name = 'erp'
 
@@ -29,5 +29,7 @@ urlpatterns = [
     # test
     path('test/', TestView.as_view(), name='test'),
     # sale
+    path('sale/list/', SaleListView.as_view(), name='sale_list'),
     path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
+    path('sale/delete/<int:pk>/', SaleDeleteView.as_view(), name='sale_delete'),
 ]
