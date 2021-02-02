@@ -100,6 +100,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         context['entity'] = 'Ventas'
         context['list_url'] = self.success_url
         context['action'] = 'add'
+        context['det'] = []
         return context
 
 
