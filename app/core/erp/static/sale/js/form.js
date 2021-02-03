@@ -179,6 +179,8 @@ $(function () {
         alert_action('Notificacion', '¿Seguro de eliminar todos los items?', function(){
             vents.items.products = []
             vents.list();
+        }, function(){
+
         });
     });
 
@@ -189,6 +191,8 @@ $(function () {
             alert_action('Notificacion', '¿Seguro de eliminar el producto de la lista?', function(){
             vents.items.products.splice(tr.row, 1);
             vents.list();
+            }, function(){
+
             });
         })
         .on('change keyup', 'input[name="cant"]', function(){
@@ -209,7 +213,7 @@ $(function () {
     $('form').on('submit', function (e) {
         e.preventDefault();
 
-        if(vents.items.products.length === 0){
+        if (vents.items.products.length === 0) {
             message_error('Debe al menos tener un item en su detalle de venta');
             return false;
         }
@@ -219,9 +223,15 @@ $(function () {
         var parameters = new FormData();
         parameters.append('action', $('input[name="action"]').val());
         parameters.append('vents', JSON.stringify(vents.items));
-        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
-            location.href = '/erp/dashboard/';
-        });
+        submit_with_ajax(window.location.pathname, 'Notificación',
+            '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
+                alert_action('Notificación', '¿Desea imprimir la boleta de venta?', function () {
+                    window.open('/erp/sale/invoice/pdf/' + response.id + '/', '_blank');
+                    location.href = '/erp/sale/list/';
+                }, function () {
+                    location.href = '/erp/sale/list/';
+                });
+            });
     });
 
     $('select[name="search"]').select2({
@@ -255,5 +265,5 @@ $(function () {
                 vents.add(data);
                 $(this).val('').trigger('change.select2');
             });
-    //vents.list();
+    vents.list();
 });
