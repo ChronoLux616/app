@@ -41,7 +41,20 @@
     {{ comp.address|upper }}
 </p>
 <p>
-    <b>FACTURA:</b> {{ sale.id }}<br>
+    {% if sale.id < 100 %}
+        <b>FACTURA:</b> 0001-000000{{ sale.id }}<br>
+    {%else%}
+        {% if sale.id >= 100 and sale.id < 1000 %}
+            <b>FACTURA:</b> 0001-00000{{ sale.id }}<br>
+        {%endif%}
+        {% if sale.id >= 1000 and sale.id < 10000 %}
+            <b>FACTURA:</b> 0001-0000{{ sale.id }}<br>
+        {%endif%}
+        {% if sale.id >= 10000 and sale.id < 100000 %}
+            <b>FACTURA:</b> 0001-000{{ sale.id }}<br>
+        {%endif%}
+    {%endif%}
+<!--    <b>FACTURA:</b> {{ sale.id }} <br>-->
     <b>FECHA DE VENTA:</b> {{ sale.date_joined }}<br>
     <b>CLIENTE:</b> {{ sale.cli.names|upper }}<br>
     <b>DNI:</b> {{ sale.cli.dni }}<br>
