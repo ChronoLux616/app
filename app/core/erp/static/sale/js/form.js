@@ -20,7 +20,7 @@ var vents = {
         this.items.total = this.items.subtotal + this.items.iva;
 
         $('input[name="subtotal"]').val(this.items.subtotal.toFixed(2));
-        $('input[name="ivacal"]').val(this.items.iva.toFixed(2));
+        $('input[name="ivacalc"]').val(this.items.iva.toFixed(2));
         $('input[name="total"]').val(this.items.total.toFixed(2));
     },
     add: function (item){
