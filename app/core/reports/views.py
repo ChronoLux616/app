@@ -6,7 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from core.reports.forms import ReportForm
 from core.erp.models import Sale
-
+from django.db.models.functions import Coalesce
+from django.db.models import Sum
 
 class ReportSaleView(TemplateView):
     template_name = 'sale/report.html'
@@ -36,6 +37,18 @@ class ReportSaleView(TemplateView):
                         format(s.iva, '.2f'),
                         format(s.total, '.2f'),
                     ])
+                subtotal = search.aggregate(r=Coalesce(Sum('subtotal'), 0)).get('r')
+                iva = search.aggregate(r=Coalesce(Sum('iva'), 0)).get('r')
+                total = search.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
+
+                data.append([
+                    '---',
+                    '---',
+                    '---',
+                    format(subtotal, '.2f'),
+                    format(iva, '.2f'),
+                    format(total, '.2f'),
+                ])
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
