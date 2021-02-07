@@ -9,6 +9,7 @@ from core.erp.models import Sale
 from django.db.models.functions import Coalesce
 from django.db.models import Sum
 
+
 class ReportSaleView(TemplateView):
     template_name = 'sale/report.html'
 
@@ -22,8 +23,8 @@ class ReportSaleView(TemplateView):
             action = request.POST['action']
             if action == 'search_report':
                 data = []
-                start_date = request.POST.get('start_date','')
-                end_date = request.POST.get('end_date','')
+                start_date = request.POST.get('start_date', '')
+                end_date = request.POST.get('end_date', '')
                 search = Sale.objects.all()
                 if len(start_date) and len(end_date):
                     search = search.filter(date_joined__range=[start_date, end_date])
