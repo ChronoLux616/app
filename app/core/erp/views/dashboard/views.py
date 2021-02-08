@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from datetime import datetime
 from core.erp.models import *
+from random import randint
 
 
 class DashboardView(TemplateView):
@@ -32,6 +33,9 @@ class DashboardView(TemplateView):
                     'colorByPoint': True,
                     'data': self.get_graph_sales_products_year_month(),
                 }
+            elif action == 'get_graph_online':
+                data = {'y': randint(1,100)}
+                print(data)
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
