@@ -7,6 +7,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from core.erp.forms import CategoryForm
 from core.erp.mixins import ValidatePermissionRequiredMixin
 from core.erp.models import Category
+from core.user.forms import UserForm
 from core.user.models import User
 
 
@@ -36,18 +37,18 @@ class UserListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Usuarios'
-        context['create_url'] = '' #reverse_lazy('erp:category_create')
+        context['create_url'] = reverse_lazy('user:user_create')
         context['list_url'] =  reverse_lazy('user:user_list')
         context['entity'] = 'Usuarios'
         return context
 
 
-class CategoryCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'category/create.html'
-    success_url = reverse_lazy('erp:category_list')
-    permission_required = 'erp.add_category'
+class UserCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
+    model = User
+    form_class = UserForm
+    template_name = 'user/create.html'
+    success_url = reverse_lazy('user:user_list')
+    permission_required = 'user.add_user'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -68,8 +69,8 @@ class CategoryCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Cr
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Creación una Categoria'
-        context['entity'] = 'Categorias'
+        context['title'] = 'Creación de un usuario'
+        context['entity'] = 'Usuarios'
         context['list_url'] = self.success_url
         context['action'] = 'add'
         return context
