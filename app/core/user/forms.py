@@ -34,7 +34,7 @@ class UserForm(ModelForm):
                     'placeholder': 'Ingrese su nick o username',
                 }
             ),
-            'password': PasswordInput(
+            'password': PasswordInput(render_value=True,
                 attrs={
                     'placeholder': 'Ingrese su contraseña',
                 }

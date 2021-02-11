@@ -76,12 +76,12 @@ class UserCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         return context
 
 
-class CategoryUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'category/create.html'
-    success_url = reverse_lazy('erp:category_list')
-    permission_required = 'erp.change_category'
+class UserUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
+    model = User
+    form_class = UserForm
+    template_name = 'user/create.html'
+    success_url = reverse_lazy('user:user_list')
+    permission_required = 'user.change_user'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -103,8 +103,8 @@ class CategoryUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Up
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Edición una Categoria'
-        context['entity'] = 'Categorias'
+        context['title'] = 'Edición de un Usuario'
+        context['entity'] = 'Usuarios'
         context['list_url'] = self.success_url
         context['action'] = 'edit'
         return context
