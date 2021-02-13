@@ -3,6 +3,7 @@
 
 {% block head %}
 <script src="{% static '/lib/highcharts-8.1.2/highcharts-8.1.2/highcharts.js' %}"></script>
+<script src="{% static '/lib/highcharts-8.1.2/highcharts-8.1.2/modules/series-label.js' %}"></script>
 <script src="{% static '/lib/highcharts-8.1.2/highcharts-8.1.2/modules/exporting.js' %}"></script>
 <script src="{% static '/lib/highcharts-8.1.2/highcharts-8.1.2/modules/export-data.js' %}"></script>
 <script src="{% static '/lib/highcharts-8.1.2/highcharts-8.1.2/modules/accessibility.js' %}"></script>
@@ -36,11 +37,24 @@
         type: 'column'
     },
     title: {
-        text: 'Reportes de Ventas'
+        text: 'Reportes de Ventas por mes'
     },
     subtitle: {
         text: 'Reporte Columnas'
     },
+    series: [{
+    type: 'column',
+        name: 'Ventas',
+    }, {
+        type: 'spline',
+        name: 'Average',
+        data: [6789, 12535, 5069, 4000, 2943],
+        marker: {
+            lineWidth: 2,
+            lineColor: Highcharts.getOptions().colors[3],
+            fillColor: 'white'
+            }
+        }],
     xAxis: {
         categories: [
             'Enero',
@@ -61,7 +75,7 @@
     yAxis: {
         min: 0,
         title: {
-            text: 'Total ventas $(L)'
+            text: 'Total ventas $'
         }
     },
     tooltip: {
@@ -77,8 +91,9 @@
             pointPadding: 0.2,
             borderWidth: 0
         }
-    },
+    }
 });
+
     /* second graph */
     var graphpie = Highcharts.chart('container-pie', {
         chart: {
@@ -88,7 +103,7 @@
             type: 'pie'
         },
         title: {
-            text: 'Porcentaje de Venta de Productos por año'
+            text: 'Porcentaje de ventas por producto'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -224,6 +239,9 @@
                     $.ajax({
                         url: window.location.pathname,
                         type: 'POST',
+                        data: {
+                            'action': 'get_graph_sale_year_month'
+                        },
                         data: {
                             'action': 'get_graph_sale_year_month'
                         },
