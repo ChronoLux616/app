@@ -110,11 +110,11 @@ class UserUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
         return context
 
 
-class CategoryDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
-    model = Category
-    template_name = 'category/delete.html'
-    success_url = reverse_lazy('erp:category_list')
-    permission_required = 'erp.delete_category'
+class UserDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
+    model = User
+    template_name = 'user/delete.html'
+    success_url = reverse_lazy('user:user_list')
+    permission_required = 'user.delete_user'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -131,7 +131,7 @@ class CategoryDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, De
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Eliminación de una Categoria'
-        context['entity'] = 'Categorias'
+        context['title'] = 'Eliminación de un Usuario'
+        context['entity'] = 'Usuarios'
         context['list_url'] = self.success_url
         return context
