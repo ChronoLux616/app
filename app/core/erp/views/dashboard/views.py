@@ -22,14 +22,14 @@ class DashboardView(TemplateView):
             action = request.POST['action']
             if action == 'get_graph_sale_year_month':
                 data = {
-                    'name': 'Porcentaje de ventas',
+                    'name': 'Ventas por mes',
                     'showInLegend': False,
                     'colorByPoint': True,
                     'data': self.get_graph_sale_year_month()
                 }
             elif action == 'get_graph_sales_products_year_month':
                 data = {
-                    'name': 'Porcentaje de Productos',
+                    'name': 'Porcentaje total de venta: ',
                     'colorByPoint': True,
                     'data': self.get_graph_sales_products_year_month(),
                 }
