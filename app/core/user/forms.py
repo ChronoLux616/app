@@ -16,29 +16,29 @@ class UserForm(ModelForm):
         widgets = {
             'first_name': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese su nombre',
+                    'placeholder': 'Ingrese sus nombres',
                 }
             ),
             'last_name': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese su apellido',
+                    'placeholder': 'Ingrese sus apellidos',
                 }
             ),
             'email': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese su correo electronico',
+                    'placeholder': 'Ingrese su email',
                 }
             ),
             'username': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese su nick o username',
+                    'placeholder': 'Ingrese su username',
                 }
             ),
             'password': PasswordInput(render_value=True,
-                attrs={
-                    'placeholder': 'Ingrese su contraseña',
-                }
-            ),
+                                      attrs={
+                                          'placeholder': 'Ingrese su password',
+                                      }
+                                      ),
             'groups': SelectMultiple(attrs={
                 'class': 'form-control select2',
                 'style': 'width: 100%',
