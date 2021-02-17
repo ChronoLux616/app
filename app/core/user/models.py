@@ -1,12 +1,12 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from config.settings import MEDIA_URL, STATIC_URL
 from django.forms import model_to_dict
+from crum import get_current_request
+from config.settings import MEDIA_URL, STATIC_URL
 
 
 class User(AbstractUser):
-    image = models.ImageField(
-        upload_to="users/%Y/%m/%d", null=True, blank=True)
+    image = models.ImageField(upload_to='users/%Y/%m/%d', null=True, blank=True)
 
     def get_image(self):
         if self.image:
@@ -22,6 +22,16 @@ class User(AbstractUser):
         item['full_name'] = self.get_full_name()
         item['groups'] = [{'id': g.id, 'name': g.name} for g in self.groups.all()]
         return item
+
+    def get_group_session(self):
+        try:
+            request = get_current_request()
+            groups = self.groups.all()
+            if groups.exists():
+                if 'group' not in request.session:
+                    request.session['group'] = groups[0]
+        except:
+            pass
 
     # def save(self, *args, **kwargs):
     #     if self.pk is None:

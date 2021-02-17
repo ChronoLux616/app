@@ -1,12 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.contrib.auth.models import Group
+from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from core.erp.forms import CategoryForm
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 from core.erp.mixins import ValidatePermissionRequiredMixin
-from core.erp.models import Category
 from core.user.forms import UserForm
 from core.user.models import User
 
@@ -38,7 +37,7 @@ class UserListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Usuarios'
         context['create_url'] = reverse_lazy('user:user_create')
-        context['list_url'] =  reverse_lazy('user:user_list')
+        context['list_url'] = reverse_lazy('user:user_list')
         context['entity'] = 'Usuarios'
         return context
 
@@ -69,7 +68,7 @@ class UserCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Creación de un usuario'
+        context['title'] = 'Creación de un Usuario'
         context['entity'] = 'Usuarios'
         context['list_url'] = self.success_url
         context['action'] = 'add'
@@ -135,3 +134,13 @@ class UserDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Delete
         context['entity'] = 'Usuarios'
         context['list_url'] = self.success_url
         return context
+
+
+class UserChangeGroup(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            request.session['group'] = Group.objects.get(pk=self.kwargs['pk'])
+        except:
+            pass
+        return HttpResponseRedirect(reverse_lazy('erp:dashboard'))
