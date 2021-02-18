@@ -137,4 +137,4 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'user.User'
 
-# SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
