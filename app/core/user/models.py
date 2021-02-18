@@ -32,12 +32,3 @@ class User(AbstractUser):
                     request.session['group'] = groups[0]
         except:
             pass
-
-    # def save(self, *args, **kwargs):
-    #     if self.pk is None:
-    #         self.set_password(self.password)
-    #     else:
-    #         user = User.objects.get(pk=self.pk)
-    #         if user.password != self.password:
-    #             self.set_password(self.password)
-    #     super().save(*args, **kwargs)
