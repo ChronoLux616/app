@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
@@ -9,7 +10,7 @@ from core.erp.models import *
 from random import randint
 
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
     @method_decorator(csrf_exempt)
@@ -38,7 +39,7 @@ class DashboardView(TemplateView):
                     'data': self.get_graph_sales_products_year_month(),
                 }
             elif action == 'get_graph_online':
-                data = {'y': randint(1,100)}
+                data = {'y': randint(1, 100)}
                 print(data)
             else:
                 data['error'] = 'Ha ocurrido un error'
