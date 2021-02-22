@@ -12,7 +12,7 @@ from core.erp.models import Category
 class CategoryListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Category
     template_name = 'category/list.html'
-    permission_required = 'erp.view_category'
+    permission_required = 'view_category', 'change_category', 'delete_category', 'add_category'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
