@@ -138,3 +138,12 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'user.User'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+# email
+EMAIL_HOST = 'smtp.xx.com'
+
+EMAIL_PORT = 587
+
+EMAIL_HOST_USER = 'email_user'
+
+EMAIL_HOST_PASSWORD = 'password_user'
