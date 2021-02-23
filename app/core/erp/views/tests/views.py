@@ -8,10 +8,10 @@ from core.erp.models import Product, Category
 
 
 class TestView(TemplateView):
-    template_name = 'tests.html'
+    template_name = 'send_email.html'
 
     @method_decorator(csrf_exempt)
-    @method_decorator(login_required)
+    # @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
