@@ -132,9 +132,9 @@ class ChangePasswordView(FormView):
 
     def get(self, request, *args, **kwargs):
         token = self.kwargs['token']
-        if User.objects.filter(token=token).exist():
+        if User.objects.filter(token=token).exists():
             return super().get(request, *args, **kwargs)
-        return HttpResponseRedirect(self.success_url)
+        return HttpResponseRedirect('/')
 
     def post(self, request, *args, **kwargs):
         data = {}
