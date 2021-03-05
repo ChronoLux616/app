@@ -2,7 +2,6 @@ from datetime import datetime
 from django.forms import *
 from core.erp.models import Category, Product, Client, Sale
 
-
 class CategoryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -159,6 +158,7 @@ class TestForm(Form):
 class SaleForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['cli'].queryset = Client.objects.none()
 
         # forma 1
         # self.fields['cli'].widget.attrs['autofocus'] = True
