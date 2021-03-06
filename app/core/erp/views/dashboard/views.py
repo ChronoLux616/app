@@ -36,7 +36,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 data = {
                     'name': 'Porcentaje total de venta: ',
                     'colorByPoint': True,
-                    'data': self.get_graph_sales_products_year_month(),
+                    'data': self.get_graph_sales_products_year_month()
                 }
             elif action == 'get_graph_online':
                 data = {'y': randint(1, 100)}
