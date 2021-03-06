@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, View
 from core.erp.models import Sale, Product, DetSale, Client
-from core.erp.forms import SaleForm
+from core.erp.forms import SaleForm, ClientForm
 import os
 from django.conf import settings
 from django.template.loader import get_template
@@ -20,7 +20,7 @@ from django.contrib.staticfiles import finders
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Sale
     template_name = 'sale/list.html'
-    permission_required = 'erp.view_sale'
+    permission_required = 'view_sale'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -58,7 +58,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
     form_class = SaleForm
     template_name = 'sale/create.html'
     success_url = reverse_lazy('erp:sale_list')
-    permission_required = 'erp.add_sale'
+    permission_required = 'add_sale'
     url_redirect = success_url
 
     @method_decorator(csrf_exempt)
@@ -104,6 +104,10 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                     item = i.toJSON()
                     item['text'] = i.get_full_name()
                     data.append(item)
+            elif action == 'create_client':
+                with transaction.atomic():
+                    frmClient = ClientForm(request.POST)
+                    data = frmClient.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -117,6 +121,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         context['list_url'] = self.success_url
         context['action'] = 'add'
         context['det'] = []
+        context['frmClient'] = ClientForm()
         return context
 
 
@@ -125,7 +130,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
     form_class = SaleForm
     template_name = 'sale/create.html'
     success_url = reverse_lazy('erp:sale_list')
-    permission_required = 'erp.change_sale'
+    permission_required = 'change_sale'
     url_redirect = success_url
 
     @method_decorator(csrf_exempt)
@@ -172,6 +177,10 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                     item = i.toJSON()
                     item['text'] = i.get_full_name()
                     data.append(item)
+            elif action == 'create_client':
+                with transaction.atomic():
+                    frmClient = ClientForm(request.POST)
+                    data = frmClient.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -197,6 +206,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
         context['list_url'] = self.success_url
         context['action'] = 'edit'
         context['det'] = json.dumps(self.get_details_product())
+        context['frmClient'] = ClientForm()
         return context
 
 
@@ -204,7 +214,7 @@ class SaleDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Delete
     model = Sale
     template_name = 'sale/delete.html'
     success_url = reverse_lazy('erp:sale_list')
-    permission_required = 'erp.delete_sale'
+    permission_required = 'delete_sale'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
