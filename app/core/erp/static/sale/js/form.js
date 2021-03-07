@@ -180,6 +180,8 @@ $(function () {
         var parameters = new FormData(this);
         parameters.append('action', 'create_client');
         submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de agregar al cliente?', parameters, function (response) {
+                var newOption = new Option(response.full_name, response.id, false, false);
+                $('select[name="cli"]').append(newOption).trigger('change');
                 $('#myModalClient').modal('hide');
             });
     });
