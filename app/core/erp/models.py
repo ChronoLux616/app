@@ -71,6 +71,7 @@ class Client(models.Model):
         item = model_to_dict(self)
         item['gender'] = {'id': self.gender, 'name': self.get_gender_display()}
         item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
+        item['full_name'] = self.get_full_name()
         return item
 
 
