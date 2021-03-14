@@ -13,7 +13,7 @@ $(function () {
             dataSrc: ""
         },
         columns: [
-            {"data": "id"},
+            {"data": "pos"},
             {"data": "names"},
             {"data": "surnames"},
             {"data": "dni"},
