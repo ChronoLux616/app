@@ -24,8 +24,12 @@ class ClientListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListVi
             action = request.POST['action']
             if action == 'searchdata':
                 data = []
+                pos = 1
                 for i in Client.objects.all():
-                    data.append(i.toJSON())
+                    item = i.toJSON()
+                    item['pos'] = pos
+                    data.append(item)
+                    pos += 1
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
