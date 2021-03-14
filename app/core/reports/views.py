@@ -43,9 +43,9 @@ class ReportSaleView(TemplateView):
                 total = search.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
 
                 data.append([
-                    '---',
-                    '---',
-                    '---',
+                    ' ',
+                    ' ',
+                    ' ',
                     format(subtotal, '.2f'),
                     format(iva, '.2f'),
                     format(total, '.2f'),
