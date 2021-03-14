@@ -114,7 +114,7 @@ $(function () {
                         targets: [-1, -3],
                         class: 'text-center',
                         render: function (data, type, row) {
-                            return '$' + parseFloat(data).toFixed(2);
+                            return '$' + '<span class="badge badge-success">' + parseFloat(data).toFixed(2) + '</span>';
                         }
                     },
                     {
