@@ -2,12 +2,10 @@ from datetime import datetime
 from django.forms import *
 from core.erp.models import Category, Product, Client, Sale
 
+
 class CategoryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # for form in self.visible_fields():
-        #     form.field.widget.attrs['class'] = 'form-control'
-        #     form.field.widget.attrs['autocomplete'] = 'off'
         self.fields['name'].widget.attrs['autofocus'] = True
 
     class Meta:
@@ -87,17 +85,17 @@ class ClientForm(ModelForm):
         widgets = {
             'names': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese sus nombres',
+                    'placeholder': 'Ingrese su nombre',
                 }
             ),
             'surnames': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese sus apellidos',
+                    'placeholder': 'Ingrese su apellido',
                 }
             ),
             'dni': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese su dni',
+                    'placeholder': 'Ingrese su N° de identidad',
                 }
             ),
             'date_birthday': DateInput(format='%Y-%m-%d',
@@ -134,7 +132,7 @@ class ClientForm(ModelForm):
     #     return cleaned
 
 
-class TestForm(Form):
+class TestForm(forms.Form):
     categories = ModelChoiceField(queryset=Category.objects.all(), widget=Select(attrs={
         'class': 'form-control select2',
         'style': 'width: 100%'
@@ -161,20 +159,6 @@ class SaleForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['cli'].queryset = Client.objects.none()
 
-        # forma 1
-        # self.fields['cli'].widget.attrs['autofocus'] = True
-        # self.fields['cli'].widget.attrs['class'] = 'form-control select2'
-        # self.fields['cli'].widget.attrs['style'] = 'width: 100%'
-        #
-        # forma 2
-        # self.fields['date_joined'].widget.attrs = {
-        #     'class': 'form-control datetimepicker-input',
-        #     'id': 'date_joined',
-        #     'data-target': '#date_joined',
-        #     'data-toggle': 'datetimepicker',
-        #     'autocomplete': 'off',
-        # }
-
     class Meta:
         model = Sale
         fields = '__all__'
@@ -183,16 +167,17 @@ class SaleForm(ModelForm):
                 'class': 'custom-select select2',
                 # 'style': 'width: 100%'
             }),
-            'date_joined': DateInput(format='%Y-%m-%d',
-                                     attrs={
-                                         'value': datetime.now().strftime('%Y-%m-%d'),
-                                         'class': 'form-control datetimepicker-input',
-                                         'id': 'date_joined',
-                                         'data-target': '#date_joined',
-                                         'data-toggle': 'datetimepicker',
-                                         'autocomplete': 'off',
-                                     }
-                                     ),
+            'date_joined': DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                    'autocomplete': 'off',
+                    'class': 'form-control datetimepicker-input',
+                    'id': 'date_joined',
+                    'data-target': '#date_joined',
+                    'data-toggle': 'datetimepicker'
+                }
+            ),
             'iva': TextInput(attrs={
                 'class': 'form-control',
             }),
@@ -205,5 +190,3 @@ class SaleForm(ModelForm):
                 'class': 'form-control',
             })
         }
-
-
