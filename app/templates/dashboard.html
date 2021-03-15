@@ -32,7 +32,7 @@
 </div>
 <script type="application/javascript">
     /* firts graph */
-    var graphcolum = Highcharts.chart('container', {
+    var graphcolumn = Highcharts.chart('container', {
     chart: {
         type: 'column'
     },
@@ -121,8 +121,6 @@
         marginRight: 10,
         events: {
             load: function () {
-
-                // set up the updating of the chart each second
                 var series = this.series[0];
                 setInterval(function () {
                     $.ajax({
@@ -222,20 +220,17 @@
     }]
 }); */
 
-    function get_graph_sale_year_month() {
+    function get_graph_sales_year_month() {
                     $.ajax({
                         url: window.location.pathname,
                         type: 'POST',
                         data: {
-                            'action': 'get_graph_sale_year_month'
-                        },
-                        data: {
-                            'action': 'get_graph_sale_year_month'
+                            'action': 'get_graph_sales_year_month'
                         },
                         dataType: 'json',
                     }).done(function (data) {
                         if (!data.hasOwnProperty('error')) {
-                            graphcolum.addSeries(data);
+                            graphcolumn.addSeries(data);
                             return false;
                         }
                         message_error(data.error);
@@ -268,10 +263,9 @@
     }
 
     $(function () {
-        get_graph_sale_year_month();
+        get_graph_sales_year_month();
         get_graph_sales_products_year_month();
     });
-
 
 </script>
 {% endblock %}
