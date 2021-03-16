@@ -15,9 +15,9 @@ function format(d) {
         html+='<tr>'
         html+='<td>'+value.prod.name+'</td>'
         html+='<td>'+value.prod.cat.name+'</td>'
-        html+='<td> $'+value.price+'</td>'
+        html+='<td>'+value.price+'</td>'
         html+='<td>'+value.cant+'</td>'
-        html+='<td> $'+value.subtotal+'</td>'
+        html+='<td>'+value.subtotal+'</td>'
         html+='</tr>';
     });
     html += '</tbody>';
@@ -114,7 +114,7 @@ $(function () {
                         targets: [-1, -3],
                         class: 'text-center',
                         render: function (data, type, row) {
-                            return '$' + '<span class="badge badge-success">' + parseFloat(data).toFixed(2) + '</span>';
+                            return '$' + parseFloat(data).toFixed(2);
                         }
                     },
                     {
