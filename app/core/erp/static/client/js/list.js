@@ -18,7 +18,7 @@ $(function () {
             {"data": "surnames"},
             {"data": "dni"},
             {"data": "date_birthday"},
-            {"data": "gender"},
+            {"data": "gender.name"},
             {"data": "id"},
         ],
         columnDefs: [
