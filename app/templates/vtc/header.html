@@ -7,8 +7,7 @@
             <a href="{% url 'erp:dashboard' %}" class="nav-link">Home</a>
         </li>
     </ul>
-    <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-        <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+    <ul class="navbar-nav ml-auto">
             {% if request.user.groups.all %}
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
