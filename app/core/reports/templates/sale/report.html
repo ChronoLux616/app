@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="">Rango de fechas:</label>
+                    <label>Rango de fechas:</label>
                     {{ form.date_range }}
                 </div>
             </div>
@@ -44,18 +44,13 @@
             </tr>
             </thead>
             <tbody>
-            {% block rows %}
-
-            {% endblock %}
             </tbody>
         </table>
     </div>
     <div class="card-footer">
-        {% block buttons_list %}
         <a href="{{ list_url }}" class="btn btn-success btn-flat">
             <i class="fas fa-sync"></i> Actualizar
         </a>
-        {% endblock %}
     </div>
 </div>
 {% endblock %}
