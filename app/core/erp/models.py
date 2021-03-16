@@ -4,7 +4,6 @@ from datetime import datetime
 from core.erp.choices import gender_choices
 from django.forms import model_to_dict
 from core.models import BaseModel
-from crum import get_current_user
 
 
 class Category(models.Model):
@@ -27,9 +26,9 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoria')
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoría')
     image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
-    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de Venta')
+    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de venta')
 
     def __str__(self):
         return self.name
@@ -62,7 +61,7 @@ class Client(models.Model):
     gender = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
 
     def __str__(self):
-        return self.names
+        return self.get_full_name()
 
     def get_full_name(self):
         return '{} {} / {}'.format(self.names, self.surnames, self.dni)
@@ -72,13 +71,6 @@ class Client(models.Model):
         item['gender'] = {'id': self.gender, 'name': self.get_gender_display()}
         item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         item['full_name'] = self.get_full_name()
-        return item
-
-
-    def toJSON(self):
-        item = model_to_dict(self)
-        item['gender'] = self.get_gender_display()
-        item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         return item
 
     class Meta:
