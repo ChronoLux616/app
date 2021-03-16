@@ -6,9 +6,6 @@ from core.user.models import User
 class UserForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # for form in self.visible_fields():
-        #     form.field.widget.attrs['class'] = 'form-control'
-        #     form.field.widget.attrs['autocomplete'] = 'off'
         self.fields['first_name'].widget.attrs['autofocus'] = True
 
     class Meta:
@@ -63,7 +60,6 @@ class UserForm(ModelForm):
                         u.set_password(pwd)
                 u.save()
                 u.groups.clear()
-
                 for g in self.cleaned_data['groups']:
                     u.groups.add(g)
             else:
@@ -76,9 +72,6 @@ class UserForm(ModelForm):
 class UserProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # for form in self.visible_fields():
-        #     form.field.widget.attrs['class'] = 'form-control'
-        #     form.field.widget.attrs['autocomplete'] = 'off'
         self.fields['first_name'].widget.attrs['autofocus'] = True
 
     class Meta:
