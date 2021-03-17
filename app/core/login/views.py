@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.views import LoginView, PasswordResetView
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy

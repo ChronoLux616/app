@@ -25,29 +25,36 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         data = {}
         try:
             action = request.POST['action']
-            if action == 'get_graph_sale_year_month':
+            if action == 'get_graph_sales_year_month':
                 data = {
                     'name': 'Ventas por mes',
                     'showInLegend': False,
                     'colorByPoint': True,
-                    'data': self.get_graph_sale_year_month()
+                    'data': self.get_graph_sales_year_month()
                 }
             elif action == 'get_graph_sales_products_year_month':
                 data = {
                     'name': 'Porcentaje total de venta: ',
                     'colorByPoint': True,
-                    'data': self.get_graph_sales_products_year_month()
+                    'data': self.get_graph_sales_products_year_month(),
                 }
             elif action == 'get_graph_online':
                 data = {'y': randint(1, 100)}
                 print(data)
+            elif action == 'get_quantity_products_sold_for_category':
+                data = {
+                    'name': 'Productos vendidos',
+                    'showInLegend': False,
+                    'colorByPoint': True,
+                    'data': ''
+                }
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
 
-    def get_graph_sale_year_month(self):
+    def get_graph_sales_year_month(self):
         data = []
         try:
             year = datetime.now().year
@@ -68,7 +75,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 total = DetSale.objects.filter(sale__date_joined__year=year, sale__date_joined__month=month,
                                                prod_id=p.id).aggregate(
                     r=Coalesce(Sum('subtotal'), 0)).get('r')
-
                 if total > 0:
                     data.append({
                         'name': p.name,
@@ -76,11 +82,18 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     })
         except:
             pass
+        return data
 
+    def get_quantity_products_sold_for_category(self):
+        data = []
+        try:
+            pass
+        except:
+            pass
         return data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['panel'] = 'Panel de administrador'
-        context['graph_sale_year_month'] = self.get_graph_sale_year_month()
+        context['graph_sales_year_month'] = self.get_graph_sales_year_month()
         return context
