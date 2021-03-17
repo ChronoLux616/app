@@ -14,7 +14,6 @@ import os
 from django.conf import settings
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
 
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
@@ -137,6 +136,12 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    def get_form(self, form_class=None):
+        instance = self.get_object()
+        form = SaleForm(instance=instance)
+        form.fields['cli'].queryset = Client.objects.filter(id=instance.cli.id)
+        return form
+
     def post(self, request, *args, **kwargs):
         data = {}
         try:
@@ -194,14 +199,13 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                 item = i.prod.toJSON()
                 item['cant'] = i.cant
                 data.append(item)
-            pass
         except:
             pass
         return data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Edicion de una Venta'
+        context['title'] = 'Edición de una Venta'
         context['entity'] = 'Ventas'
         context['list_url'] = self.success_url
         context['action'] = 'edit'
@@ -274,8 +278,7 @@ class SaleInvoicePdfView(View):
             }
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')
-            #response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-
+            # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
             pisaStatus = pisa.CreatePDF(
                 html, dest=response,
                 link_callback=self.link_callback
