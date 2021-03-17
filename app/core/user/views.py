@@ -52,6 +52,7 @@ class UserCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
     permission_required = 'add_user'
     url_redirect = success_url
 
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -85,6 +86,7 @@ class UserUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
     permission_required = 'change_user'
     url_redirect = success_url
 
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
@@ -154,6 +156,7 @@ class UserProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'user/profile.html'
     success_url = reverse_lazy('erp:dashboard')
 
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
@@ -189,6 +192,7 @@ class UserChangePasswordView(LoginRequiredMixin, FormView):
     template_name = 'user/change_password.html'
     success_url = reverse_lazy('login')
 
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 

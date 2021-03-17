@@ -1,5 +1,4 @@
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -28,7 +27,6 @@ class ReportSaleView(TemplateView):
                 search = Sale.objects.all()
                 if len(start_date) and len(end_date):
                     search = search.filter(date_joined__range=[start_date, end_date])
-
                 for s in search:
                     data.append([
                         s.id,
@@ -63,3 +61,4 @@ class ReportSaleView(TemplateView):
         context['list_url'] = reverse_lazy('sale_report')
         context['form'] = ReportForm()
         return context
+
