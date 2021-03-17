@@ -28,6 +28,12 @@
             <div id="container-online"></div>
         </div>
     </div>
+    <!--Div that will hold the pie chart-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="container-prod"></div>
+        </div>
+    </div>
     <br>
 </div>
 <script type="application/javascript">
@@ -220,6 +226,56 @@
     }]
 }); */
 
+/* fourth graph */
+    var graphcolumns = Highcharts.chart('container-prod', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Cantidad de Productos vendidos por Categoria'
+    },
+    subtitle: {
+        text: 'Reporte Columnas'
+    },
+    xAxis: {
+        categories: [
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril',
+            'Mayo',
+            'Junio',
+            'Julio',
+            'Agosto',
+            'Septiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre'
+        ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total ventas $'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} $</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    }
+});
+
     function get_graph_sales_year_month() {
                     $.ajax({
                         url: window.location.pathname,
@@ -261,6 +317,27 @@
 
                     });
     }
+
+    /* function get_quantity_products_sold_for_category() {
+                    $.ajax({
+                        url: window.location.pathname,
+                        type: 'POST',
+                        data: {
+                            'action': 'get_quantity_products_sold_for_category'
+                        },
+                        dataType: 'json',
+                    }).done(function (data) {
+                        if (!data.hasOwnProperty('error')) {
+                            graphpie.addSeries(data);
+                            return false;
+                        }
+                        message_error(data.error);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus + ': ' + errorThrown);
+                    }).always(function (data) {
+
+                    });
+    } */
 
     $(function () {
         get_graph_sales_year_month();
