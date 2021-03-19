@@ -1,19 +1,22 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from core.erp.mixins import ValidatePermissionRequiredMixin
 import json
+import os
+
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, View
-from core.erp.models import Sale, Product, DetSale, Client
-from core.erp.forms import SaleForm, ClientForm
-import os
-from django.conf import settings
-from django.template.loader import get_template
 from xhtml2pdf import pisa
+
+from core.erp.forms import SaleForm, ClientForm
+from core.erp.mixins import ValidatePermissionRequiredMixin
+from core.erp.models import Sale, Product, DetSale, Client
 
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
@@ -70,14 +73,23 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
             action = request.POST['action']
             if action == 'search_products':
                 data = []
-                term = request.POST['term']
+                term = request.POST['term'].strip()
                 products = Product.objects.filter()
                 if len(term):
-                    products = Product.objects.filter(name__icontains=term)
-                for i in products:
+                    products = products.filter(name__icontains=term)
+                for i in products[0:10]:
                     item = i.toJSON()
                     item['value'] = i.name
                     # item['text'] = i.name
+                    data.append(item)
+            elif action == 'search_autocomplete':
+                data = []
+                term = request.POST['term'].strip()
+                data.append({'id': term, 'text':term})
+                products = Product.objects.filter(name__icontains=term)
+                for i in products[0:10]:
+                    item = i.toJSON()
+                    item['text'] = i.name
                     data.append(item)
             elif action == 'add':
                 with transaction.atomic():
@@ -151,14 +163,23 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
             action = request.POST['action']
             if action == 'search_products':
                 data = []
-                term = request.POST['term']
+                term = request.POST['term'].strip()
                 products = Product.objects.filter()
                 if len(term):
-                    products = Product.objects.filter(name__icontains=term)
-                for i in products:
+                    products = products.filter(name__icontains=term)
+                for i in products[0:10]:
                     item = i.toJSON()
                     item['value'] = i.name
                     # item['text'] = i.name
+                    data.append(item)
+            elif action == 'search_autocomplete':
+                data = []
+                term = request.POST['term'].strip()
+                data.append({'id': term, 'text': term})
+                products = Product.objects.filter(name__icontains=term)
+                for i in products[0:10]:
+                    item = i.toJSON()
+                    item['text'] = i.name
                     data.append(item)
             elif action == 'edit':
                 with transaction.atomic():
