@@ -34,20 +34,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 }
             elif action == 'get_graph_sales_products_year_month':
                 data = {
-                    'name': 'Porcentaje total de venta: ',
+                    'name': 'Porcentaje de Producto Vendido: ',
                     'colorByPoint': True,
                     'data': self.get_graph_sales_products_year_month(),
                 }
             elif action == 'get_graph_online':
                 data = {'y': randint(1, 100)}
                 print(data)
-            elif action == 'get_quantity_products_sold_for_category':
-                data = {
-                    'name': 'Productos vendidos',
-                    'showInLegend': False,
-                    'colorByPoint': True,
-                    'data': ''
-                }
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
@@ -72,22 +65,19 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         month = datetime.now().month
         try:
             for p in Product.objects.all():
-                total = DetSale.objects.filter(sale__date_joined__year=year, sale__date_joined__month=month,
-                                               prod_id=p.id).aggregate(
+                # sales for months ->
+                # total = DetSale.objects.filter(sale__date_joined__year=year, sale__date_joined__month=month,
+                #                                prod_id=p.id).aggregate(
+                #     r=Coalesce(Sum('subtotal'), 0)).get('r')
+
+                # sales for year
+                total = DetSale.objects.filter(sale__date_joined__year=year, prod_id=p.id).aggregate(
                     r=Coalesce(Sum('subtotal'), 0)).get('r')
                 if total > 0:
                     data.append({
                         'name': p.name,
                         'y': float(total)
                     })
-        except:
-            pass
-        return data
-
-    def get_quantity_products_sold_for_category(self):
-        data = []
-        try:
-            pass
         except:
             pass
         return data
