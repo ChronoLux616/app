@@ -27,7 +27,7 @@ $(function () {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return '<img src="'+ row.image+ '" class="img-fluid mx-auto d-block" style="width: 30px; height: 30px;">'
+                    return '<img src="'+ row.image+ '" class="img-fluid mx-auto d-block img-profile"">'
                 }
             },
             {
