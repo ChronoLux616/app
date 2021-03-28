@@ -36,7 +36,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 data = {
                     'name': 'Porcentaje de Producto Vendido: ',
                     'colorByPoint': True,
-                    'data': self.get_graph_sales_products_year_month(),
+                    'data': self.get_graph_sales_products_year_month()
                 }
             elif action == 'get_graph_online':
                 data = {'y': randint(1, 100)}
@@ -85,5 +85,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['panel'] = 'Panel de administrador'
+        context['title'] = 'Pagina Principal'
         context['graph_sales_year_month'] = self.get_graph_sales_year_month()
         return context
