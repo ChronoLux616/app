@@ -1,7 +1,7 @@
 import os
 from config.wsgi import *
 from django.template.loader import get_template
-from weasyprint import HTML
+from weasyprint import HTML, CSS
 from config import settings
 
 def printTicket():
